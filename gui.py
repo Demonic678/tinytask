@@ -66,9 +66,13 @@ def open_settings():
 
     # Calculate total duration of all loops
     def calculate_total_duration():
-        total_seconds = sum(action["time"] for action in recorded_actions) * max_loops
-        minutes, seconds = divmod(total_seconds, 60)
-        return f"{int(minutes)} minutes {seconds:.2f} seconds"
+        if recorded_actions:
+            total_seconds = max(action["time"] for action in recorded_actions) * max_loops
+        else:
+            total_seconds = 0
+        hours, remainder = divmod(total_seconds, 3600)
+        minutes, seconds = divmod(remainder, 60)
+        return f"{int(hours)} hours {int(minutes)} minutes {seconds:.2f} seconds"
 
     total_duration_label = tk.Label(settings, text=f"Total Duration: {calculate_total_duration()}")
     total_duration_label.pack()
